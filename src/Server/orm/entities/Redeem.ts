@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import TRCAEntity from '../trcaentity';
+import { User } from './User';
 
 @Entity()
 export class Redeem extends TRCAEntity {
@@ -32,4 +33,10 @@ export class Redeem extends TRCAEntity {
    */
   @Column({ type: 'int', default: 10 })
   duration: number;
+
+  /**
+   * Connection to user
+   */
+  @ManyToOne(() => User, (u) => u.id)
+  user: number;
 }

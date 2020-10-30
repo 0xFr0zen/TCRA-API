@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import express, { Request, Response } from 'express';
+import cors from 'cors';
 import { createConnection } from 'typeorm';
 import EntityManager from './Server/orm/manager';
 import Routes from './Server/utils/routes';
@@ -12,6 +13,11 @@ createConnection()
     // Create express app
     const app = express();
     app.use(express.json());
+    app.use(
+      cors({
+        origin: '*',
+      })
+    );
     const evopRoute = express.Router({
       mergeParams: true,
       strict: true,

@@ -1,12 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { Session } from '../entities/Session';
-import { User } from '../entities/User';
 import dayjs from 'dayjs';
 import Errors from '../../utils/messages/errors/index';
-import { hash } from 'argon2';
 export class SessionController {
-  private userRepository = getRepository(User);
   private sessionRepository = getRepository(Session);
   private static SESSION_HOLDING_TIME: number = 14;
   private static SESSION_HOLDING_FORMAT: dayjs.OpUnitType = 'day';
@@ -20,14 +17,15 @@ export class SessionController {
   async check(request: Request, response: Response, next: NextFunction) {
     try {
       let session: Session;
-      // No sessoin available
-      if (!(<string>request.header('evop-session'))) {
+      // No session available
+      if (!(<string>request.header('trca-session'))) {
         // Get the Session-Objekt
         session = await this.sessionRepository.findOne({
           where: {
             ip: request.ip,
           },
         });
+        // create session
         if (!session) {
           session = await this.sessionRepository.create({
             hash: await this.create(),
@@ -40,16 +38,15 @@ export class SessionController {
               .toDate(),
           });
         }
-        // create session
       } else {
-        // Get the Session-Objekt
+        // Get the Session-Object
         session = await this.sessionRepository.findOne({
           where: {
-            hash: <string>request.header('evop-session'),
+            hash: <string>request.header('trca-session'),
           },
         });
       }
-
+      // if (!session) throw Errors.SESSION_EXPIRED;
       if (
         dayjs(session.expiresAt).diff(
           session.createdAt,
@@ -60,7 +57,7 @@ export class SessionController {
       await this.sessionRepository.update({ id: session.id }, {});
       // await this.sessionRepository.save(session);
 
-      response.header('evop-session', session.hash);
+      response.header('trca-session', session.hash);
       return next();
     } catch (error) {
       return error;

@@ -4,16 +4,10 @@ import TRCAEntity from '../trcaentity';
 @Entity()
 export class User extends TRCAEntity {
   /**
-   * First Name of the User
+   * Username
    */
   @Column({ nullable: false, default: '' })
-  firstName!: string;
-
-  /**
-   * Last Name of the User
-   */
-  @Column({ nullable: false, default: '' })
-  lastName!: string;
+  name!: string;
 
   /**
    * E-Mail of the User

@@ -6,6 +6,8 @@ import IParamOrBody from '../../utils/interfaces/ParamOrBody/index';
 import { EntityType } from '../../utils/types/Entities';
 import { hasValidParameters } from '../../utils/Validation';
 import IEntities from '../../utils/interfaces/Entities';
+import { Redeem } from '../entities/Redeem';
+import { Command } from '../entities/Command';
 
 /**
  * EntityManager Class
@@ -17,6 +19,7 @@ export default class EntityManager {
    * User-Repository from `typeorm->connection->getRepository()`
    */
   private static userRepository: Repository<User>;
+  private static redeemRepository: Repository<Redeem>;
 
   /**
    * Initalizes the Repositories
@@ -25,9 +28,10 @@ export default class EntityManager {
   public static init = async (connection: Connection) => {
     console.log('waiting for stable connection');
     if (connection.isConnected) {
-      await (() => new Promise((resolve) => setTimeout(resolve, 2000)))();
+      await (() => new Promise((resolve) => setTimeout(resolve, 100)))();
       console.log('Loading repos');
       EntityManager.userRepository = connection.getRepository(User);
+      EntityManager.redeemRepository = connection.getRepository(Redeem);
     }
   };
 
@@ -59,6 +63,58 @@ export default class EntityManager {
     });
 
   /**
+   * Gets the Redeem from the Database via Repository
+   * @param request Request
+   */
+  private static getRedeem = async (
+    request: Request | IParamOrBody
+  ): Promise<Redeem> =>
+    new Promise(async (resolve, reject) => {
+      try {
+        hasValidParameters('params', request, 'redeem');
+        const num = isNaN(Number(request.params.uid))
+          ? -1
+          : Number(request.params.uid);
+        const user = await EntityManager.redeemRepository
+          .createQueryBuilder()
+          .where(`id = :uid`, { uid: num })
+          .orWhere(`name = :uname`, { uname: request.params.uid })
+          .getOne();
+        if (!user) {
+          return reject(Errors.REDEEM_DOES_NOT_EXIST);
+        }
+        return resolve(user);
+      } catch (error) {
+        return reject(error);
+      }
+    });
+  /**
+   * Gets the Command from the Database via Repository
+   * @param request Request
+   */
+  private static getCommand = async (
+    request: Request | IParamOrBody
+  ): Promise<Redeem> =>
+    new Promise(async (resolve, reject) => {
+      try {
+        hasValidParameters('params', request, 'command');
+        const num = isNaN(Number(request.params.uid))
+          ? -1
+          : Number(request.params.uid);
+        const user = await EntityManager.redeemRepository
+          .createQueryBuilder()
+          .where(`id = :uid`, { uid: num })
+          .orWhere(`name = :uname`, { uname: request.params.uid })
+          .getOne();
+        if (!user) {
+          return reject(Errors.COMMAND_DOES_NOT_EXIST);
+        }
+        return resolve(user);
+      } catch (error) {
+        return reject(error);
+      }
+    });
+  /**
    * Records of fastened-functions (Repository-access, premade)
    */
   private static records: Record<
@@ -69,6 +125,22 @@ export default class EntityManager {
       new Promise(async (resolve, reject) => {
         try {
           return resolve((await EntityManager.getUser(request)) as User);
+        } catch (error) {
+          return reject(error);
+        }
+      }),
+    redeem: async (request): Promise<Redeem> =>
+      new Promise(async (resolve, reject) => {
+        try {
+          return resolve((await EntityManager.getRedeem(request)) as Redeem);
+        } catch (error) {
+          return reject(error);
+        }
+      }),
+    command: async (request): Promise<Command> =>
+      new Promise(async (resolve, reject) => {
+        try {
+          return resolve((await EntityManager.getCommand(request)) as Command);
         } catch (error) {
           return reject(error);
         }

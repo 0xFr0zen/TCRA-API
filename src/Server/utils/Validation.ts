@@ -14,13 +14,19 @@ const Parameters: IParameters = {
       prefix: 'u',
       search: [{ name: 'id', type: 'string' }],
     },
+    redeem: {
+      prefix: 'r',
+      search: [{ name: 'id', type: 'string' }],
+    },
+    command: {
+      prefix: 'c',
+      search: [{ name: 'id', type: 'string' }],
+    },
   },
   body: {
     user: {
       search: [
         { name: 'name', type: 'string' },
-        { name: 'firstName', type: 'string' },
-        { name: 'lastName', type: 'string' },
         { name: 'email', type: 'string' },
         { name: 'password', type: 'string' },
       ],
@@ -29,6 +35,25 @@ const Parameters: IParameters = {
       search: [
         { name: 'email', type: 'string' },
         { name: 'password', type: 'string' },
+      ],
+    },
+    redeem: {
+      search: [
+        { name: 'name', type: 'string' },
+        { name: 'text', type: 'string' },
+        { name: 'gif', type: 'string' },
+        { name: 'sound', type: 'string' },
+        { name: 'duration', type: 'number', defaultvalue: 10 },
+      ],
+    },
+    command: {
+      search: [
+        { name: 'name', type: 'string' },
+        { name: 'access', type: 'number', defaultvalue: 4 },
+        { name: 'text', type: 'string' },
+        { name: 'gif', type: 'string' },
+        { name: 'sound', type: 'string' },
+        { name: 'duration', type: 'number', defaultvalue: 10 },
       ],
     },
   },
@@ -77,6 +102,7 @@ export const hasValidParameters = (
       } else {
         let myvalue = request[paramtype][newSearch];
         let mytype = typeof myvalue;
+
         if (mytype !== type) {
           er = Errors.WRONG_QUERY_PARAMETER_TYPE(pname, type, mytype, myvalue);
         }

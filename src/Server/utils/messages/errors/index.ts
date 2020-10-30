@@ -7,16 +7,11 @@ import ErrorCreator from './create';
  */
 const Errors = {
   /**
-   * Company does not exist
+   * Session has expired
    */
-  COMPANY_DOES_NOT_EXIST: ErrorCreator('company:id', 'Company does not exist'),
-
-  /**
-   * Company has no productgroups
-   */
-  COMPANY_HAS_NO_PRODUCTGROUP_S: ErrorCreator(
-    'company:product_group',
-    'Company has no productgroups'
+  SESSION_EXPIRED: ErrorCreator(
+    'session:time',
+    'The session you are using is expired. Create another one.'
   ),
 
   /**
@@ -60,14 +55,6 @@ const Errors = {
   },
 
   /**
-   * Productgroup does not exist
-   */
-  PRODUCTGROUP_DOES_NOT_EXIST: ErrorCreator(
-    'company:product_group',
-    'This Productgroup does not exist'
-  ),
-
-  /**
    * User does not exist
    */
   USER_DOES_NOT_EXIST: ErrorCreator('user:id', 'User does not exist'),
@@ -81,37 +68,26 @@ const Errors = {
   ),
 
   /**
-   * Slot exists already
+   * Redeem does not exist
    */
-  SLOT_EXISTS_ALREADY: ErrorCreator('slot:name', 'Slot exist already'),
+  REDEEM_DOES_NOT_EXIST: ErrorCreator('redeem:id', 'Redeem does not exist'),
 
   /**
-   * Slot does not exist
+   * Redeem already exists
    */
-  SLOT_DOES_NOT_EXIST: ErrorCreator('slot:id', 'Slot does not exist'),
+  REDEEM_EXISTS_ALREADY: ErrorCreator('redeem:name', 'Redeem already exists'),
 
   /**
-   * Slot not available
+   * Command does not exist
    */
-  SLOT_NOT_AVAILABLE: ErrorCreator(
-    'slot:time',
-    'The time for the slot is already used, please you a different Slot.'
-  ),
+  COMMAND_DOES_NOT_EXIST: ErrorCreator('command:id', 'Command does not exist'),
 
   /**
-   * Notification does not exist
+   * Command already exists
    */
-  NOTIFICATION_DOES_NOT_EXIST: ErrorCreator(
-    'notification:id',
-    'The Notification does not exist'
-  ),
-
-  /**
-   * Session has expired
-   */
-  SESSION_EXPIRED: ErrorCreator(
-    'session:time',
-    'The session you are using is expired. Create another one.'
+  COMMAND_EXISTS_ALREADY: ErrorCreator(
+    'command:name',
+    'command already exists'
   ),
 };
 export default Errors;

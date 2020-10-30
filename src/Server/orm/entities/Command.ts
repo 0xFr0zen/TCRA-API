@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import TRCAEntity from '../trcaentity';
+import { User } from './User';
 
 @Entity()
 export class Command extends TRCAEntity {
@@ -8,6 +9,12 @@ export class Command extends TRCAEntity {
    */
   @Column({ type: 'text' })
   name!: string;
+
+  /**
+   * Command text
+   */
+  @Column({ type: 'text' })
+  text!: string;
 
   /**
    * Command access
@@ -38,4 +45,10 @@ export class Command extends TRCAEntity {
    */
   @Column({ type: 'int', default: 60 })
   cooldown!: number;
+
+  /**
+   * Connection to user
+   */
+  @ManyToOne(() => User, (u) => u.id)
+  user: number;
 }
