@@ -30,12 +30,12 @@ export class Command extends TRCAEntity {
   /**
    * Duration
    */
-  @Column({ type: 'number', default: 10 })
+  @Column({ type: 'int', default: 10 })
   duration!: number;
 
   /**
    * Cooldown
    */
-  @Column({ type: 'number', default: 60 })
+  @Column({ type: 'int', default: 60 })
   cooldown!: number;
 }

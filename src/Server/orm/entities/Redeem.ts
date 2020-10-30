@@ -30,6 +30,6 @@ export class Redeem extends TRCAEntity {
   /**
    * Duration
    */
-  @Column({ type: 'number', default: 10 })
+  @Column({ type: 'int', default: 10 })
   duration: number;
 }
