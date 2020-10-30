@@ -2,34 +2,40 @@ import { Column, Entity } from 'typeorm';
 import TRCAEntity from '../trcaentity';
 
 @Entity()
-export class Redeem extends TRCAEntity {
+export class Command extends TRCAEntity {
   /**
-   * Redeem name
+   * Command name
    */
   @Column({ type: 'text' })
   name!: string;
 
   /**
-   * Redeem text
+   * Command access
    */
-  @Column({ type: 'text' })
-  text: string;
+  @Column({ type: 'enum', enum: [0, 1, 2, 3, 4], default: 4 })
+  access!: 0 | 1 | 2 | 3 | 4;
 
   /**
    * Gif link
    */
   @Column({ type: 'text' })
-  gif: string;
+  gif!: string;
 
   /**
    * Sound link
    */
   @Column({ type: 'text' })
-  sound: string;
+  sound!: string;
 
   /**
    * Duration
    */
   @Column({ type: 'number', default: 10 })
-  duration: number;
+  duration!: number;
+
+  /**
+   * Cooldown
+   */
+  @Column({ type: 'number', default: 60 })
+  cooldown!: number;
 }
