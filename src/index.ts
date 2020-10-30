@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import express, { Request, Response } from 'express';
 import { createConnection } from 'typeorm';
-import EntityManager from './orm/manager';
-import Routes from './utils/routes';
+import EntityManager from './Server/orm/manager';
+import Routes from './Server/utils/routes';
 
 // process.on('warning', e => console.warn(e.stack));
 createConnection()

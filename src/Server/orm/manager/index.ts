@@ -25,7 +25,7 @@ export default class EntityManager {
   public static init = async (connection: Connection) => {
     console.log('waiting for stable connection');
     if (connection.isConnected) {
-      await (() => new Promise((resolve) => setTimeout(resolve, 1000)))();
+      await (() => new Promise((resolve) => setTimeout(resolve, 2000)))();
       console.log('Loading repos');
       EntityManager.userRepository = connection.getRepository(User);
     }

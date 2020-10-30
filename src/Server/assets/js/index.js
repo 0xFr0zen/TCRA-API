@@ -16,11 +16,11 @@ const queue = new Queue();
 /* Custom Redemption Alerts */
 var customRedeemAlerts = [
     {
-    "name": "REPLACE_WITH_REDEMPTION_NAME", // Correct name of the redemption
-    "text":  " REPLACE_WITH_TEXT_YOU_WANT", // Text to be displayed | For Redemptions with Text Input put #REPLACEWITHCONTENT# to input the user text to the Alert
-    "gif": "https://media.giphy.com/media/xT9IgG50Fb7Mi0prBC/giphy.gif", // Either a link or a file in the current folder
-    "sound": "horn.wav", // File in current folder
-    "duration": 10 // Duration in seconds
+    "name": "REPLACE_WITH_REDEMPTION_NAME", 
+    "text":  " REPLACE_WITH_TEXT_YOU_WANT", 
+    "gif": "https://media.giphy.com/media/xT9IgG50Fb7Mi0prBC/giphy.gif", 
+    "sound": "horn.wav", 
+    "duration": 10 
   }
 ];
 
