@@ -1,0 +1,10 @@
+{
+  "name": "tcra_api",
+  "version": "1.0.0",
+  "repository": "https://github.com/0xFr0zen/TCRA-API.git",
+  "author": "0xFr0zen <0xfr0zen@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": ""
+  }
+}
