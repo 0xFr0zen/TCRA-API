@@ -1,0 +1,18 @@
+{
+  "type": "mysql",
+  "host": "localhost",
+  "port": 3306,
+  "username": "trca",
+  "password": "trcapassword",
+  "database": "trca",
+  "synchronize": true,
+  "logging": true,
+  "entities": ["src/Server/orm/entity/**/*.ts"],
+  "migrations": ["src/Server/orm/migration/**/*.ts"],
+  "subscribers": ["src/Server/orm/subscriber/**/*.ts"],
+  "cli": {
+    "entitiesDir": "src/Server/orm/entity",
+    "migrationsDir": "src/Server/orm/migration",
+    "subscribersDir": "src/Server/orm/subscriber"
+  }
+}
