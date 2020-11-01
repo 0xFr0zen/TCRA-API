@@ -14,19 +14,19 @@ export class Redeem extends TRCAEntity {
    * Redeem text
    */
   @Column({ type: 'text' })
-  text: string;
+  text!: string;
 
   /**
    * Gif link
    */
   @Column({ type: 'text' })
-  gif: string;
+  gif!: string;
 
   /**
    * Sound link
    */
   @Column({ type: 'text' })
-  sound: string;
+  sound!: string;
 
   /**
    * Sound volume
@@ -38,7 +38,7 @@ export class Redeem extends TRCAEntity {
    * Duration
    */
   @Column({ type: 'int', default: 10 })
-  duration: number;
+  duration!: number;
 
   /**
    * Connection to user

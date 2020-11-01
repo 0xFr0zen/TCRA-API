@@ -1,2 +1,60 @@
-This is a twitch overlay bot for custom commands and custom redemptions built on the [ComfyJS](https://github.com/instafluff/ComfyJS) (a wrapper around [tmi.js](https://github.com/tmijs/tmi.js)) and the initial work of [bdougie's beybot](https://github.com/open-sauced/beybot).
+# Twitch Redeem&Command Alert API
 
+## URLs
+
+### `/u(ser)/:id`
+> `:id` has to be integer or string (username) 
+Example Result:
+```json
+{
+  "id": 1,
+  "createdAt": "2020-10-30T18:33:31.853Z",
+  "name": "<username>",
+  "email": "<email>"
+}
+```
+
+### `/u(ser)/:id/c(ommand)s`
+> `:id` has to be integer or string (username) 
+Example Result:
+```json
+[
+  {
+    "id": 1,
+    "createdAt": "2020-11-01T20:28:32.717Z",
+    "name": "yolo",
+    "text": "hallo welt",
+    "access": 4,
+    "gif": "https://media.giphy.com/media/3ov9k7W6qpJPyFmHuM/giphy.gif",
+    "sound": "Magic_Chime.mp3",
+    "volume": 0.3,
+    "duration": 2,
+    "cooldown": 60
+  },
+  ...
+]
+```
+
+
+### `/u(ser)/:id/r(edeem)s`
+> `:id` has to be integer or string (username) 
+Example Result:
+```json
+[
+  {
+    "id": 1,
+    "createdAt": "2020-11-01T21:52:01.111Z",
+    "name": "yolo",
+    "text": "hallo welt",
+    "gif": "https://media.giphy.com/media/3ov9k7W6qpJPyFmHuM/giphy.gif",
+    "sound": "horn.wav",
+    "volume": 0.5,
+    "duration": 10
+  },
+  ...
+]
+```
+
+
+## TODO:
+* Rework response after post request (bug)
