@@ -6,6 +6,7 @@ const twitchTvHandle = 'oetziofficial';
 const oAuth = 'oauth:r64s7y1rxj745lt0eehy7f971wi6hd';
 // Channel where the bot should listen
 const channelToConnectTo = 'oetziofficial';
+const SERVER_URL = `http://localhost:3000/u/${twitchTvHandle}`;
 
 /* Default Variables to fall back to [DO NOT TOUCH] */
 const PAUSE_DURATION = 30 * 1000; // 30 seconds -- Not Used Right now
@@ -22,12 +23,8 @@ let customRedeemAlerts;
 /* Custom Command Alerts */
 let customCommandAlerts;
 (async () => {
-  let cra = await fetch(`http://localhost:3000/u/${twitchTvHandle}/rs`);
-  customRedeemAlerts = cra.body;
-  let cca = await fetch(`http://localhost:3000/u/${twitchTvHandle}/cs`, {
-    headers: { 'trca-session': cra.headers.get('trca-session') },
-  });
-  customCommandAlerts = cca.body;
+  customRedeemAlerts = await (await fetch(`${SERVER_URL}/rs`)).json();
+  customCommandAlerts = await (await fetch(`${SERVER_URL}/cs`)).json();
 })();
 
 const wait = async (duration) => {
@@ -38,36 +35,29 @@ ComfyJS.Init(twitchTvHandle, oAuth, channelToConnectTo);
 
 ComfyJS.onCommand = (user, command, message, flags, extra) => {
   console.log(`!${command} was typed in chat`);
-  for (var i = 0; i < customCommandAlerts.length; i++) {
-    if (command == customCommandAlerts[i].name) {
-      console.log(customCommandAlerts[i]);
-      var access = customCommandAlerts[i].access;
-      if (flags.broadcaster || access == 4) {
-        InitAlert(user, message, customCommandAlerts[i]);
-      } else if (
-        (flags.mod && access > 0) ||
-        (flags.subscriber && access > 1) ||
-        (flags.vip && access > 2)
-      ) {
-        InitAlert(user, message, customCommandAlerts[i]);
-      } else {
-        console.log(
-          `!${user} didn't have the required rights to access this command!`
-        );
-      }
-      break;
+  const cca = customCommandAlerts.filter((cca) => cca.name === command)[0];
+  if (cca) {
+    if (flags.broadcaster || cca.access == 4) {
+      InitAlert(user, message, cca);
+    } else if (
+      (flags.mod && cca.access > 0) ||
+      (flags.subscriber && cca.access > 1) ||
+      (flags.vip && cca.access > 2)
+    ) {
+      InitAlert(user, message, cca);
+    } else {
+      console.log(
+        `!${user} didn't have the required rights to access this command!`
+      );
     }
   }
+
   console.log(user, command, message, flags, extra);
 };
 
 ComfyJS.onReward = (user, reward, cost, extra) => {
-  for (var i = 0; i < customRedeemAlerts.length; i++) {
-    if (reward == customRedeemAlerts[i].name) {
-      InitAlert(user, extra, customRedeemAlerts[i]);
-      break;
-    }
-  }
+  const cra = customRedeemAlerts.filter((cra) => cra.name === reward)[0];
+  if (cra) InitAlert(user, extra, cra);
   console.log(user, reward, cost, extra);
 };
 
@@ -80,6 +70,8 @@ function InitAlert(user, msg, opts) {
   var sound = null;
   if (opts.sound != '') {
     sound = new Audio(`./assets/audio/${opts.sound}`);
+    sound.volume = opts.volume;
+    sound.autoplay = true;
   }
   content = opts.text.replace(/#([^#]+)#/g, msg);
   DISPLAY_DURATION = opts.duration * 1000;
@@ -89,7 +81,9 @@ function InitAlert(user, msg, opts) {
 function gifAlert(user, gif, audio, text) {
   queue.add(async () => {
     if (audio) {
-      audio.play();
+      audio.onloadeddata = async () => {
+        await audio.play();
+      };
     }
     container.innerHTML = `
       <h1 class="text-shadows">${user + text}</h1>

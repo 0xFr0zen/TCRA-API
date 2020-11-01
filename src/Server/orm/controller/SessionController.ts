@@ -1,10 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
-import { getRepository } from 'typeorm';
+import { DeepPartial, getRepository } from 'typeorm';
 import { Session } from '../entities/Session';
 import dayjs from 'dayjs';
 import Errors from '../../utils/messages/errors/index';
+import { User } from '../entities/User';
 export class SessionController {
   private sessionRepository = getRepository(Session);
+  private userRepository = getRepository(User);
   private static SESSION_HOLDING_TIME: number = 14;
   private static SESSION_HOLDING_FORMAT: dayjs.OpUnitType = 'day';
 
@@ -16,9 +18,11 @@ export class SessionController {
    */
   async check(request: Request, response: Response, next: NextFunction) {
     try {
+      let sessionhash = <string>request.header('trca-session') ?? undefined;
       let session: Session;
+
       // No session available
-      if (!(<string>request.header('trca-session'))) {
+      if (!sessionhash) {
         // Get the Session-Objekt
         session = await this.sessionRepository.findOne({
           where: {
@@ -37,16 +41,18 @@ export class SessionController {
               )
               .toDate(),
           });
+          await this.sessionRepository.save(session);
         }
       } else {
         // Get the Session-Object
         session = await this.sessionRepository.findOne({
           where: {
-            hash: <string>request.header('trca-session'),
+            hash: sessionhash,
+            ip: request.ip,
           },
         });
       }
-      // if (!session) throw Errors.SESSION_EXPIRED;
+      if (!session) throw Errors.SESSION_EXPIRED;
       if (
         dayjs(session.expiresAt).diff(
           session.createdAt,
@@ -54,6 +60,7 @@ export class SessionController {
         ) > SessionController.SESSION_HOLDING_TIME
       )
         throw Errors.SESSION_EXPIRED;
+
       await this.sessionRepository.update({ id: session.id }, {});
       // await this.sessionRepository.save(session);
 

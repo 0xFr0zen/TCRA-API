@@ -31,6 +31,8 @@ export class CommandController extends Controller {
    */
   async one(request: Request, response: Response, next: NextFunction) {
     try {
+      hasValidParameters('params', request, 'command');
+
       return <Command>await EntityManager.getEntity(request, 'command');
     } catch (error) {
       return error;
@@ -83,6 +85,7 @@ export class CommandController extends Controller {
     if (!isNaN(n)) {
       w = { id: n };
     }
+    console.log(w);
 
     b.user = (await User.findOne({ where: w })).id;
 

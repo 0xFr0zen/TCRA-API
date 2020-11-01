@@ -35,6 +35,12 @@ export class Command extends TRCAEntity {
   sound!: string;
 
   /**
+   * Sound volume
+   */
+  @Column({ type: 'float', default: 0.5 })
+  volume!: number;
+
+  /**
    * Duration
    */
   @Column({ type: 'int', default: 10 })
