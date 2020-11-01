@@ -3,7 +3,7 @@
 ## URLs
 
 ### `/u(ser)/:uid`
-> `:id` has to be integer or string (username) 
+> `:uid` has to be integer or string (username) 
 Example Result:
 ```json
 {
@@ -15,7 +15,7 @@ Example Result:
 ```
 
 ### `/u(ser)/:uid/c(ommand)s`
-> `:id` has to be integer or string (username) 
+> `:uid` has to be integer or string (username) 
 Example Result:
 ```json
 [
@@ -37,7 +37,7 @@ Example Result:
 
 
 ### `/u(ser)/:uid/r(edeem)s`
-> `:id` has to be integer or string (username) 
+> `:uid` has to be integer or string (username) 
 Example Result:
 ```json
 [
