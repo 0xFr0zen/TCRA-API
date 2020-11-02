@@ -56,5 +56,4 @@ Example Result:
 ```
 
 
-## TODO:
-* Rework response after post request (bug)
+## TODOs:
