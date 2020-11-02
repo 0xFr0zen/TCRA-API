@@ -4,6 +4,8 @@ import cors from 'cors';
 import { createConnection } from 'typeorm';
 import EntityManager from './Server/orm/manager';
 import Routes from './Server/utils/routes';
+import fs from 'fs';
+import path from 'path';
 
 // process.on('warning', e => console.warn(e.stack));
 createConnection()
@@ -48,7 +50,30 @@ createConnection()
       );
     });
     app.use(evopRoute);
+    app.get('/assets/:file(*)', (request: Request, response: Response) => {
+      let p = path.join(
+        process.cwd(),
+        'src/Server/assets/',
+        request.params.file
+      );
+      let maxP = path.join(process.cwd(), 'src/Server/assets/');
+      let scope = path.relative(maxP, p);
 
+      if (scope.split('..'.concat(path.sep)).length === 1) {
+        response.sendFile(
+          path.join(process.cwd(), 'src/Server/assets/', request.params.file)
+        );
+      } else {
+        response.sendStatus(403);
+      }
+    });
+    app.get('/', (request: Request, response: Response) => {
+      response.send(
+        fs
+          .readFileSync(path.join(process.cwd(), 'src/Server/index.html'))
+          .toString()
+      );
+    });
     // Start express server
     app.listen(3000);
 

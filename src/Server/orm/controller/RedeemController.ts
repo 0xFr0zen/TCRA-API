@@ -83,18 +83,21 @@ export class RedeemController extends Controller {
     if (!isNaN(n)) {
       w = { id: n };
     }
-
-    b.user = (await User.findOne({ where: w })).id;
-    let u: Redeem;
+    const userid = (await User.findOne({ where: w })).id;
+    b.user = userid;
+    let r: Redeem;
     try {
-      u = <Redeem>(
+      r = <Redeem>(
         await this.redeemRepository.save(await this.redeemRepository.create(b))
       );
     } catch (error) {
       return Errors.REDEEM_EXISTS_ALREADY;
     }
     return <Redeem>(
-      await EntityManager.getEntity({ params: { uid: `${u.id}` } }, 'redeem')
+      await EntityManager.getEntity(
+        { params: { uid: `${userid}`, rid: `${r.id}` } },
+        'redeem'
+      )
     );
   }
 }

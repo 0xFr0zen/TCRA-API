@@ -86,12 +86,12 @@ export class CommandController extends Controller {
       w = { id: n };
     }
     console.log(w);
+    const userid = (await User.findOne({ where: w })).id;
+    b.user = userid;
 
-    b.user = (await User.findOne({ where: w })).id;
-
-    let u: Command;
+    let c: Command;
     try {
-      u = <Command>(
+      c = <Command>(
         await this.commandRepository.save(
           await this.commandRepository.create(b)
         )
@@ -100,7 +100,10 @@ export class CommandController extends Controller {
       return Errors.COMMAND_EXISTS_ALREADY;
     }
     return <Command>(
-      await EntityManager.getEntity({ params: { uid: `${u.id}` } }, 'command')
+      await EntityManager.getEntity(
+        { params: { uid: `${userid}`, cid: `${c.id}` } },
+        'command'
+      )
     );
   }
 }
