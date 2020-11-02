@@ -4,6 +4,7 @@
 
 ### `/u(ser)/:uid`
 > `:uid` has to be integer or string (username) 
+
 Example Result:
 ```json
 {
@@ -16,6 +17,7 @@ Example Result:
 
 ### `/u(ser)/:uid/c(ommand)s`
 > `:uid` has to be integer or string (username) 
+
 Example Result:
 ```json
 [
@@ -38,6 +40,7 @@ Example Result:
 
 ### `/u(ser)/:uid/r(edeem)s`
 > `:uid` has to be integer or string (username) 
+
 Example Result:
 ```json
 [
