@@ -20,6 +20,7 @@ export default class EntityManager {
    */
   private static userRepository: Repository<User>;
   private static redeemRepository: Repository<Redeem>;
+  private static commandRepository: Repository<Command>;
 
   /**
    * Initalizes the Repositories
@@ -32,6 +33,7 @@ export default class EntityManager {
       console.log('Loading repos');
       EntityManager.userRepository = connection.getRepository(User);
       EntityManager.redeemRepository = connection.getRepository(Redeem);
+      EntityManager.commandRepository = connection.getRepository(Command);
     }
   };
 
@@ -72,13 +74,13 @@ export default class EntityManager {
     new Promise(async (resolve, reject) => {
       try {
         hasValidParameters('params', request, 'redeem');
-        const num = isNaN(Number(request.params.uid))
+        const num = isNaN(Number(request.params.rid))
           ? -1
-          : Number(request.params.uid);
+          : Number(request.params.rid);
         const user = await EntityManager.redeemRepository
           .createQueryBuilder()
-          .where(`id = :uid`, { uid: num })
-          .orWhere(`name = :uname`, { uname: request.params.uid })
+          .where(`id = :rid`, { rid: num })
+          .orWhere(`name = :rname`, { rname: request.params.rid })
           .getOne();
         if (!user) {
           return reject(Errors.REDEEM_DOES_NOT_EXIST);
@@ -94,17 +96,17 @@ export default class EntityManager {
    */
   private static getCommand = async (
     request: Request | IParamOrBody
-  ): Promise<Redeem> =>
+  ): Promise<Command> =>
     new Promise(async (resolve, reject) => {
       try {
         hasValidParameters('params', request, 'command');
-        const num = isNaN(Number(request.params.uid))
+        const num = isNaN(Number(request.params.cid))
           ? -1
-          : Number(request.params.uid);
-        const user = await EntityManager.redeemRepository
+          : Number(request.params.cid);
+        const user = await EntityManager.commandRepository
           .createQueryBuilder()
-          .where(`id = :uid`, { uid: num })
-          .orWhere(`name = :uname`, { uname: request.params.uid })
+          .where(`id = :cid`, { cid: num })
+          .orWhere(`name = :cname`, { cname: request.params.cid })
           .getOne();
         if (!user) {
           return reject(Errors.COMMAND_DOES_NOT_EXIST);

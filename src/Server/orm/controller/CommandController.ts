@@ -6,7 +6,7 @@ import EntityManager from '../manager';
 import { hasValidParameters } from '../../utils/Validation';
 import { Controller } from './AbstractController';
 import { User } from '../entities/User';
-import { Redeem } from '../entities/Redeem';
+// import { Redeem } from '../entities/Redeem';
 import { Command } from '../entities/Command';
 
 export class CommandController extends Controller {
@@ -48,12 +48,12 @@ export class CommandController extends Controller {
   async save(request: Request, response: Response, next: NextFunction) {
     try {
       hasValidParameters('body', request, 'command');
-      let u = <Redeem>await EntityManager.getEntity(request, 'command');
+      let u = <Command>await EntityManager.getEntity(request, 'command');
       await this.commandRepository.update(
         { id: u.id },
-        request.body as DeepPartial<Redeem>
+        request.body as DeepPartial<Command>
       );
-      return <Redeem>await EntityManager.getEntity(request, 'command');
+      return <Command>await EntityManager.getEntity(request, 'command');
     } catch (error) {
       return error;
     }
