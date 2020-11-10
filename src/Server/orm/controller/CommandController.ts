@@ -86,8 +86,8 @@ export class CommandController extends Controller {
       w = { id: n };
     }
     console.log(w);
-    const userid = (await User.findOne({ where: w })).id;
-    b.user = userid;
+    const ownerid = (await User.findOne({ where: w })).id;
+    b.owner = ownerid;
 
     let c: Command;
     try {
@@ -101,7 +101,7 @@ export class CommandController extends Controller {
     }
     return <Command>(
       await EntityManager.getEntity(
-        { params: { uid: `${userid}`, cid: `${c.id}` } },
+        { params: { uid: `${ownerid}`, cid: `${c.id}` } },
         'command'
       )
     );

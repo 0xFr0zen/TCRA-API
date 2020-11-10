@@ -7,8 +7,14 @@ import IRouteConfig from '../interfaces/RouteConfig';
 export default [
   {
     method: 'use',
-    route: '/*',
+    route: '/session',
     controller: SessionController,
-    action: 'check',
+    action: 'precheck',
+  },
+  {
+    method: 'use',
+    route: /.*(?<!\/session)/,
+    controller: SessionController,
+    action: 'postcheck',
   },
 ] as Array<IRouteConfig>;

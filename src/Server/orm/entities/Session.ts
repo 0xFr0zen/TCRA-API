@@ -1,15 +1,14 @@
-import { User } from './User';
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
-export class Session {
+export class Session extends BaseEntity {
   /**
    * ID of Session
    */
@@ -39,6 +38,18 @@ export class Session {
    */
   @Column({ type: 'text' })
   hash: string;
+
+  /**
+   * Twitch-Access-Token
+   */
+  @Column({ type: 'text', nullable: false })
+  code: string;
+
+  /**
+   * Twitch-Access-Token
+   */
+  @Column({ type: 'json', nullable: false })
+  scopes: any;
 
   /**
    * Device-IP

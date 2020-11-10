@@ -1,10 +1,11 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import TRCAEntity from '../trcaentity';
-import { User } from './User';
-import Alert from '../Alert';
 
+/**
+ * Evop-Entity
+ */
 @Entity()
-export class Redeem extends Alert {
+export default class Alert extends TRCAEntity {
   /**
    * Command name
    */
@@ -46,10 +47,4 @@ export class Redeem extends Alert {
    */
   @Column({ type: 'int', default: 60 })
   cooldown!: number;
-
-  /**
-   * Connection to user
-   */
-  @ManyToOne(() => User, (u) => u.id)
-  owner: number;
 }

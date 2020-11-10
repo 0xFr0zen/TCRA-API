@@ -11,12 +11,12 @@ export class SessionController {
   private static SESSION_HOLDING_FORMAT: dayjs.OpUnitType = 'day';
 
   /**
-   * Checks if given Session is valid
+   * Post-Checks if given Session is valid
    * @param request Request
    * @param response Response
    * @param next Next
    */
-  async check(request: Request, response: Response, next: NextFunction) {
+  async postcheck(request: Request, response: Response, next: NextFunction) {
     try {
       let sessionhash = <string>request.header('trca-session') ?? undefined;
       let session: Session;
@@ -64,6 +64,7 @@ export class SessionController {
       await this.sessionRepository.update({ id: session.id }, {});
       // await this.sessionRepository.save(session);
 
+      console.log('setting-headers-2');
       response.header('trca-session', session.hash);
       return next();
     } catch (error) {
@@ -71,6 +72,40 @@ export class SessionController {
     }
   }
 
+  /**
+   * Pre-Checks if given Session is valid
+   * @param request Request
+   * @param response Response
+   * @param next Next
+   */
+  async precheck(request: Request, response: Response, next: NextFunction) {
+    try {
+      await this.sessionRepository.delete({ ip: request.ip });
+      let token = request.query.code as string;
+      let scope = request.query.scope as string;
+      let scopes = scope.split('+');
+      let session = await this.sessionRepository.create({
+        hash: await this.create(),
+        ip: request.ip,
+        expiresAt: dayjs()
+          .add(
+            SessionController.SESSION_HOLDING_TIME,
+            SessionController.SESSION_HOLDING_FORMAT
+          )
+          .toDate(),
+        code: token,
+        scopes,
+      });
+      await this.sessionRepository.save(session);
+
+      response.header('trca-session', session.hash).json({
+        session: session.hash,
+      });
+      return next();
+    } catch (error) {
+      return error;
+    }
+  }
   /**
    * Creates Session
    */

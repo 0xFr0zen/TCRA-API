@@ -84,7 +84,7 @@ export class RedeemController extends Controller {
       w = { id: n };
     }
     const userid = (await User.findOne({ where: w })).id;
-    b.user = userid;
+    b.owner = userid;
     let r: Redeem;
     try {
       r = <Redeem>(
